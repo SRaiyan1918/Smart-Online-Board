@@ -75,13 +75,13 @@ function D(o){x.save();x.lineCap=x.lineJoin='round';x.strokeStyle=x.fillStyle=o.
  else if(o.k==='text'){const fs=o.w*3+14;x.font=fs+'px system-ui,sans-serif';x.textBaseline='top';o.tx.split('\n').forEach((l,i)=>x.fillText(l,o.pts[0][0],o.pts[0][1]+i*(fs+4)))}
  else if(o.k==='note'){const a=o.pts[0][0],b=o.pts[0][1];x.shadowColor='rgba(0,0,0,.35)';x.shadowBlur=10;x.fillStyle=o.nc;x.beginPath();x.roundRect(a,b,o.W,o.H,o.rd||6);x.fill();x.shadowBlur=0;x.fillStyle=o.tc||'#222';x.font='600 '+o.fs+'px system-ui,sans-serif';x.textBaseline='top';x.textAlign=o.ct?'center':'left';const ls=wrap(o.tx,o.W-16),lh=o.fs*1.25,y0=b+(o.ct?Math.max(4,(o.H-ls.length*lh)/2):8);ls.forEach((l,i)=>x.fillText(l,o.ct?a+o.W/2:a+8,y0+i*lh))}
  else if(o.k==='shape')shape(o);else stroke(o);x.restore()}
-function paint(){const v=S.v;{const w=1280*v.s,h=720*v.s;v.x=Math.min(Wd-80,Math.max(80-w,v.x));v.y=Math.min(Hd-60,Math.max(60-h,v.y))}x.setTransform(dpr,0,0,dpr,0,0);x.fillStyle='#0b0e12';x.fillRect(0,0,Wd,Hd);x.setTransform(dpr*v.s,0,0,dpr*v.s,dpr*v.x,dpr*v.y);x.fillStyle=S.bg;x.fillRect(0,0,1280,720);x.setTransform(dpr,0,0,dpr,0,0);
+function paint(){const v=S.v;x.setTransform(dpr,0,0,dpr,0,0);x.fillStyle=S.bg;x.fillRect(0,0,Wd,Hd);
  x.setTransform(dpr*v.s,0,0,dpr*v.s,dpr*v.x,dpr*v.y);
- if(S.grid){const st=40,x0=Math.max(0,Math.floor(-v.x/v.s/st)*st),y0=Math.max(0,Math.floor(-v.y/v.s/st)*st),x1=Math.min(1280,(Wd-v.x)/v.s),y1=Math.min(720,(Hd-v.y)/v.s);
+ if(S.grid){const st=40,x0=Math.floor(-v.x/v.s/st)*st,y0=Math.floor(-v.y/v.s/st)*st,x1=(Wd-v.x)/v.s,y1=(Hd-v.y)/v.s;
   x.strokeStyle=x.fillStyle=lum(S.bg)>.5?'rgba(0,0,0,.18)':'rgba(255,255,255,.2)';x.lineWidth=1/v.s;
   for(let a=x0;a<x1;a+=st)for(let b=y0;b<y1;b+=st){if(S.grid===1)x.fillRect(a-1/v.s,b-1/v.s,2/v.s,2/v.s)}
   if(S.grid===2){x.beginPath();for(let a=x0;a<x1;a+=st){x.moveTo(a,y0);x.lineTo(a,y1)}for(let b=y0;b<y1;b+=st){x.moveTo(x0,b);x.lineTo(x1,b)}x.stroke()}}
- {const mx=x;try{x=lx;x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,L.width,L.height);x.setTransform(dpr*v.s,0,0,dpr*v.s,dpr*v.x,dpr*v.y);x.save();x.beginPath();x.rect(0,0,1280,720);x.clip();FM=1;P().o.forEach(o=>{if(o.fc)D(o)});FM=2;P().o.forEach(D);FM=0;if(cur)D(cur);x.restore()}finally{x=mx;FM=0}x.save();x.setTransform(1,0,0,1,0,0);x.drawImage(L,0,0);x.restore()}
+ {const mx=x;try{x=lx;x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,L.width,L.height);x.setTransform(dpr*v.s,0,0,dpr*v.s,dpr*v.x,dpr*v.y);x.save();FM=1;P().o.forEach(o=>{if(o.fc)D(o)});FM=2;P().o.forEach(D);FM=0;if(cur)D(cur);x.restore()}finally{x=mx;FM=0}x.save();x.setTransform(1,0,0,1,0,0);x.drawImage(L,0,0);x.restore()}
  drawGd();{const sb=selBox();x.save();x.strokeStyle='#2aa7ff';x.setLineDash([6/v.s,4/v.s]);x.lineWidth=1.5/v.s;if(sb){x.strokeRect(sb[0]-6,sb[1]-6,sb[2]-sb[0]+12,sb[3]-sb[1]+12);x.setLineDash([]);x.fillStyle='#2aa7ff';x.beginPath();x.arc(sb[2]+6,sb[3]+6,11/v.s,0,7);x.fill();x.strokeStyle='#fff';x.lineWidth=2/v.s;x.beginPath();x.arc(sb[2]+6,sb[3]+6,5/v.s,.5,5);x.stroke();x.strokeStyle='#2aa7ff';x.setLineDash([6/v.s,4/v.s])}if(lasso){x.beginPath();lasso.forEach((r,i)=>i?x.lineTo(r[0],r[1]):x.moveTo(r[0],r[1]));x.stroke()}x.restore()}
  x.setTransform(dpr,0,0,dpr,0,0);
  if(S.spot){x.fillStyle='rgba(0,0,0,.8)';x.beginPath();x.rect(0,0,Wd,Hd);x.arc(last.x,last.y,110,0,7,true);x.fill('evenodd')}
@@ -145,7 +145,7 @@ const up=e=>{ptr.delete(e.pointerId);document.body.classList.remove('writing');i
  if(ptr.size<2&&mode==='g')mode=null;else if(ptr.size===0)mode=null;R();save()};
 cv.onpointerup=up;cv.onpointercancel=up;
 cv.onwheel=e=>{e.preventDefault();const f=e.deltaY<0?1.1:.91,p=W(e),s=Math.min(8,Math.max(.2,S.v.s*f));S.v={s,x:e.clientX-p.x*s,y:e.clientY-p.y*s};R()};
-function zoom(f){const cx=Wd/2,cy=Hd/2,p={x:(cx-S.v.x)/S.v.s,y:(cy-S.v.y)/S.v.s},s=f?Math.min(8,Math.max(.2,S.v.s*f)):1;if(f)S.v={s,x:cx-p.x*s,y:cy-p.y*s};else fit();R()}
+function zoom(f){const cx=Wd/2,cy=Hd/2,p={x:(cx-S.v.x)/S.v.s,y:(cy-S.v.y)/S.v.s},s=f?Math.min(8,Math.max(.2,S.v.s*f)):1;S.v=f?{s,x:cx-p.x*s,y:cy-p.y*s}:{x:0,y:0,s:1};R()}
 function setBg(b){S.bg=b;if(lum(b)>.5&&S.c==='#ffffff')S.c='#111111';else if(lum(b)<.5&&S.c==='#111111')S.c='#ffffff';R();save();ui()}
 /* save / load */
 let sT;function save(){clearTimeout(sT);sT=setTimeout(()=>{try{localStorage.setItem('classboard1',JSON.stringify({pi:S.pi,bg:S.bg,c:S.c,w:S.w,grid:S.grid,pages:S.pages.map(p=>p.o.filter(o=>o.k!=='img'))}))}catch(e){}},500)}
@@ -176,12 +176,12 @@ function panel(){const el=$('#panel');el.hidden=!open;if(!open)return;
  if(tab==='Insert')h+=`<h4>Shapes &amp; text</h4><div class=grid>${SHAPES.map(t=>TB(...t)).join('')}</div><h4>Insert</h4><div class=grid>${AB('sticky','Sticky Note','🗒️')}${AB('mind','Mind Map','🧠')}${AB('table','Table','▦')}${AB('img','Image','🖼️')}${AB('cam','Camera','📷')}${AB('yt','YouTube','▶️')}${AB('web','Web Page','🌐')}${AB('slides','Slides (images)','🎞️')}${AB('impdf','PDF Slides','📄')}</div>`;
  if(tab==='Board')h+=`<h4>Canvas</h4><div class=row>${BGS.map(b=>`<button class="b ${S.bg===b[0]?'on':''}" data-bg="${b[0]}">${b[1]}</button>`).join('')}</div><div class=grid>${AB('undo','Undo','↶')}${AB('redo','Redo','↷')}${AB('clear','Clear','🗑️')}${AB('grid','Grid: '+['Off','Dots','Lines'][S.grid],'▦',S.grid)}${AB('newpage','New Page','📄')}${AB('delpage','Del Page','❌')}${AB('export','Save PNG','💾')}${AB('newb','New Board','🆕')}</div><div style="color:#8fa0b3">Auto-save ON: board is browser me save rehta hai.</div>`;
  if(tab==='Studio')h+=`<h4>Teaching overlays</h4><div class=grid>${AB('spot','Spotlight','🔦',S.spot)}${AB('curtain','Curtain','🎭',S.cur)}${AB('full','Fullscreen','⛶')}</div><h4>Zoom ${Math.round(S.v.s*100)}%</h4><div class=row><button class=b data-a=zout>−</button><button class=b data-a=zin>＋</button><button class=b data-a=zreset>Reset 100%</button><button class=b data-a=fit>Fit slide</button></div>`;
- if(tab==='Save')h+='<h4>Save / Export</h4><div class=grid>'+AB('exppdf','PDF (saari slides)','📄')+AB('expppt','PPT (saari slides)','📊')+AB('exppng','PNG (ye slide)','🖼️')+'</div><div style="color:#8fa0b3">Har slide = 1 page. PPT me slide tasveer ke roop me jati hai.</div>';el.innerHTML=h}
+ if(tab==='Save')h+='<h4>Save / Export</h4><div class=grid>'+AB('exppdf','PDF (saari slides)','📄')+AB('expppt','PPT (saari slides)','📊')+AB('exppng','PNG (ye slide)','🖼️')+'</div><div style="color:#8fa0b3">Har slide = 1 page (content wala hissa 16:9 me). PPT me slide tasveer ke roop me jati hai.</div>';el.innerHTML=h}
 const A={undo,redo,tk(){open=!open;ui()},close(){open=false;ui()},prev(){S.pi=(S.pi+S.pages.length-1)%S.pages.length;sel=null;R();ui();save()},next(){S.pi=(S.pi+1)%S.pages.length;sel=null;R();ui();save()},
- newpage(){S.pages.splice(S.pi+1,0,{o:[],h:[],r:[]});S.pi++;fit();ui();save()},
+ newpage(){S.pages.splice(S.pi+1,0,{o:[],h:[],r:[]});S.pi++;S.v={x:0,y:0,s:1};R();ui();save()},
  delpage(){if(S.pages.length>1&&confirm('Ye page delete karein?')){S.pages.splice(S.pi,1);S.pi=Math.max(0,S.pi-1);R();ui();save()}else if(S.pages.length<2)toast('Akela page delete nahi hota')},
  clear(){if(P().o.length&&confirm('Is page ko clear karein?')){snap();P().o=[];R();save()}},
- newb(){if(confirm('Naya board? Saare pages hat jayenge.')){S.pages=[{o:[],h:[],r:[]}];S.pi=0;fit();ui();save()}},
+ newb(){if(confirm('Naya board? Saare pages hat jayenge.')){S.pages=[{o:[],h:[],r:[]}];S.pi=0;S.v={x:0,y:0,s:1};R();ui();save()}},
  grid(){S.grid=(S.grid+1)%3;R();ui();save()},img(){$('#file').removeAttribute('capture');$('#file').click()},cam(){$('#file').setAttribute('capture','environment');$('#file').click()},
  export:exportPNG,rec,fillt(){S.fill^=1;ui()},rotl(){sop(-.2618,1,0,0)},rotr(){sop(.2618,1,0,0)},sup(){sop(0,1.1,0,0)},sdn(){sop(0,.9,0,0)},flh(){sop(0,1,1,0)},flv(){sop(0,1,0,1)},desel(){sel=[];ui();R()},mini(){document.body.classList.toggle('mini');open=false;ui()},guide(){S.gd=(S.gd+1)%3;toast(['Scale band','Ruler: kinare ke paas likho','Circle guide: ring ke paas likho'][S.gd]);R();ui()},save(){open=true;tab='Save';ui()},exppdf(){expPDF()},expppt(){expPPT()},exppng(){exportPNG()},impdf(){$('#pdff').click()},fit(){fit();ui()},slides(){$('#files').click()},
  seldel(){cloneSel();const s=sel;P().o=P().o.filter(o=>!s.includes(o));sel=[];R();ui();save()},
@@ -201,7 +201,7 @@ function win(t,u){const d=document.createElement('div');u=u.replace(/"/g,'%22');
  d.innerHTML='<div style="display:flex;gap:6px;align-items:center;padding:4px 8px;background:var(--panel);touch-action:none;cursor:move"><b style="flex:1;overflow:hidden;white-space:nowrap">'+t+'</b><a class=b href="'+u+'" target=_blank rel=noopener style="text-decoration:none;color:inherit">↗ Open</a><button class=b>✕</button></div><iframe src="'+u+'" style="flex:1;border:0;width:100%;background:#fff" allow="autoplay;fullscreen;encrypted-media" allowfullscreen></iframe>';
  const h=d.firstChild;let o=null;h.lastChild.onclick=()=>d.remove();h.onpointerdown=e=>{if(e.target.closest('a,button'))return;h.setPointerCapture(e.pointerId);o=[e.clientX-d.offsetLeft,e.clientY-d.offsetTop]};h.onpointermove=e=>{if(o){d.style.left=e.clientX-o[0]+'px';d.style.top=e.clientY-o[1]+'px'}};h.onpointerup=()=>o=null;document.body.appendChild(d)}
 document.addEventListener('input',e=>{if(e.target.id==='stb'){S.stab=+e.target.value;e.target.nextElementSibling.textContent=S.stab}});
-function fit(){const s=Math.min(Wd/1280,Hd/720);S.v={s,x:(Wd-1280*s)/2,y:(Hd-720*s)/2};R()}
+function fit(){const B=pageBox(P()),s=Math.min(Wd/B[2],Hd/B[3]);S.v={s,x:(Wd-B[2]*s)/2-B[0]*s,y:(Hd-B[3]*s)/2-B[1]*s};R()}
 $('#rail').innerHTML='<button class=b data-a=mini>☰</button><button class=b data-a=full>⛶</button><button class=b data-a=zin>＋</button><button class=b data-a=zout>－</button>';
 $('#files').onchange=async e=>{const fs=[...e.target.files].sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));e.target.value='';if(!fs.length)return;if(S.pages.length===1&&!S.pages[0].o.length)S.pages=[];const first=S.pages.length;
  for(const f of fs){const im=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>{const i=new Image();i.onload=()=>r(i);i.src=fr.result};fr.readAsDataURL(f)});const k=Math.min(1280/im.width,720/im.height);S.pages.push({o:[{k:'img',im,W:im.width*k,H:im.height*k,c:'',w:1,pts:[[(1280-im.width*k)/2,(720-im.height*k)/2]]}],h:[],r:[]})}
@@ -256,8 +256,9 @@ function auto2(o){const p=o.pts;if(p.length<5)return{...o,fc:0};const bb=q=>{let
  B=bb(q);const cx=(B[0]+B[2])/2,cy=(B[1]+B[3])/2,rx=(B[2]-B[0])/2||1,ry=(B[3]-B[1])/2||1,er=q.reduce((s,r)=>s+Math.abs(Math.hypot((r[0]-cx)/rx,(r[1]-cy)/ry)-1),0)/q.length;
  return{...o,k:'shape',t:er<.14?'ellipse':'rect',pts:[[B[0],B[1]],[B[2],B[3]]]}}
 const LL=document.createElement('canvas'),llx=LL.getContext('2d');
-function renderPage(pg,W2,H2){const c=document.createElement('canvas');c.width=W2;c.height=H2;const m=c.getContext('2d');LL.width=W2;LL.height=H2;const sc=W2/1280,mx=x;m.fillStyle=S.bg;m.fillRect(0,0,W2,H2);
- try{x=llx;x.setTransform(sc,0,0,sc,0,0);FM=1;pg.o.forEach(o=>{if(o.fc)D(o)});FM=2;pg.o.forEach(D)}finally{x=mx;FM=0}
+function pageBox(pg){let a=1e9,b=1e9,c=-1e9,d=-1e9;pg.o.forEach(o=>{if(o.t==='erase')return;const B=bbox(o);a=Math.min(a,B[0]);b=Math.min(b,B[1]);c=Math.max(c,B[2]);d=Math.max(d,B[3])});if(a>c)return[0,0,1280,720];a-=24;b-=24;c+=24;d+=24;let w=Math.max(1280,c-a),h=Math.max(720,d-b);if(w/h<16/9)w=h*16/9;else h=w*9/16;return[(a+c)/2-w/2,(b+d)/2-h/2,w,h]}
+function renderPage(pg,W2,H2){const c=document.createElement('canvas');c.width=W2;c.height=H2;const m=c.getContext('2d');LL.width=W2;LL.height=H2;const Bx=pageBox(pg),sc=W2/Bx[2],mx=x;m.fillStyle=S.bg;m.fillRect(0,0,W2,H2);
+ try{x=llx;x.setTransform(sc,0,0,sc,-Bx[0]*sc,-Bx[1]*sc);FM=1;pg.o.forEach(o=>{if(o.fc)D(o)});FM=2;pg.o.forEach(D)}finally{x=mx;FM=0}
  m.drawImage(LL,0,0);return c}
 const jb=c=>{const s=atob(c.toDataURL('image/jpeg',.92).split(',')[1]),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u};
 function mkPDF(js){const E=s=>new TextEncoder().encode(s),ch=[],of=[];let n=0;const w=b=>{if(typeof b==='string')b=E(b);ch.push(b);n+=b.length},N=js.length;w('%PDF-1.4\n');
@@ -298,5 +299,5 @@ $('#pdff').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)
    const im=await new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.src=c.toDataURL('image/jpeg',.9)}),k=Math.min(1280/im.width,720/im.height);
    S.pages.push({o:[{k:'img',im,W:im.width*k,H:im.height*k,c:'',w:1,pts:[[(1280-im.width*k)/2,(720-im.height*k)/2]]}],h:[],r:[]});if(n===1){S.pi=first;fit()}toast('Page '+n+'/'+d.numPages)}
   S.pi=first;fit();ui();toast(d.numPages+' slides import hui')}catch(err){toast('PDF import nahi hua (internet ya block)')}};
-size();fit();ui();
+size();ui();
 </script></body></html>
